@@ -71,14 +71,6 @@ export default function LoginForm() {
               </p>
             </>
           )}
-          {state === 'UnknownError' && (
-            <>
-              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p aria-live="polite" className="text-sm text-red-500">
-                Unkown Error
-              </p>
-            </>
-          )}
         </div>
       </div>
     </form>
