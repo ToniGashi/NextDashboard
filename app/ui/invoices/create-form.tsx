@@ -9,10 +9,29 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '../button';
+import { useFormState, useFormStatus } from 'react-dom'
+import { createInvoice } from '@/app/lib/actions';
+import Image from 'next/image';
+import ErrorIcon from '@/public/errorIcon.svg';
+import styles from './Error.module.css'
+
+const initialErrorState = {
+  message: null,
+  errors: {}
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    <Button aria-disabled={pending} type="submit">Create Invoice</Button>
+  )
+}
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
+  const [errorState, formAction] = useFormState(createInvoice, initialErrorState)
+
   return (
-    <form>
+    <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -37,6 +56,17 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             </select>
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
+        {errorState.errors?.customerId ? (
+        <div
+          id="customer-error"
+          aria-live="polite"
+          className="mt-2 text-sm text-red-500"
+        >
+          {errorState.errors.customerId.map((error: string) => (
+            <p key={error}>{error}</p>
+          ))}
+        </div>
+      ) : null}
         </div>
 
         {/* Invoice Amount */}
@@ -57,9 +87,18 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
-          s
+          {errorState.errors?.amount ? (
+          <div
+            id="customer-error"
+            aria-live="polite"
+            className="mt-2 text-sm text-red-500"
+          >
+            {errorState.errors.amount.map((error: string) => (
+              <p key={error}>{error}</p>
+            ))}
+          </div>
+        ) : null}
         </div>
-
         {/* Invoice Status */}
         <div>
           <label htmlFor="status" className="mb-2 block text-sm font-medium">
@@ -99,8 +138,27 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               </div>
             </div>
           </div>
+          {errorState.errors?.status ? (
+          <div
+            id="customer-error"
+            aria-live="polite"
+            className="mb-2 text-sm text-red-500"
+          >
+            {errorState.errors.status.map((error: string) => (
+              <p key={error}>{error}</p>
+            ))}
+          </div>
+        ) : null}
         </div>
       </div>
+      {errorState.message && <div className={styles.error}>
+        <div className={styles.error_icon}>
+          <Image height={32} width={32} src={ErrorIcon} alt='Error icon'/>
+        </div>
+        <div className={styles.error_title}>
+          {errorState.message}
+        </div>
+      </div>}
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/invoices"
@@ -108,7 +166,8 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         >
           Cancel
         </Link>
-        <Button type="submit">Create Invoice</Button>
+        <SubmitButton />
+        
       </div>
     </form>
   );

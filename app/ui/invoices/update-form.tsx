@@ -9,16 +9,28 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
+import { updateInvoice } from '@/app/lib/actions';
+import { useFormState } from 'react-dom';
+import ErrorIcon from '@/public/errorIcon.svg';
+import styles from './Error.module.css'
+import Image from 'next/image';
 
-export default function EditInvoiceForm({
+const initialErrorState = {
+  message: null,
+  errors: {}
+}
+
+export default function UpdateInvoiceForm({
   invoice,
   customers,
 }: {
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
+  const [errorState, formAction] = useFormState(updateInvoice, initialErrorState)
+
   return (
-    <form>
+    <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Invoice ID */}
         <input type="hidden" name="id" value={invoice.id} />
@@ -45,6 +57,17 @@ export default function EditInvoiceForm({
             </select>
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
+          {errorState.errors?.customerId ? (
+          <div
+            id="customer-error"
+            aria-live="polite"
+            className="mt-2 text-sm text-red-500"
+          >
+            {errorState.errors.customerId.map((error: string) => (
+              <p key={error}>{error}</p>
+            ))}
+          </div>
+        ) : null}
         </div>
 
         {/* Invoice Amount */}
@@ -65,6 +88,17 @@ export default function EditInvoiceForm({
               <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
+          {errorState.errors?.amount ? (
+            <div
+              id="customer-error"
+              aria-live="polite"
+              className="mt-2 text-sm text-red-500"
+            >
+              {errorState.errors.amount.map((error: string) => (
+                <p key={error}>{error}</p>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         {/* Invoice Status */}
@@ -108,8 +142,27 @@ export default function EditInvoiceForm({
               </div>
             </div>
           </div>
+          {errorState.errors?.status ? (
+          <div
+            id="customer-error"
+            aria-live="polite"
+            className="mb-2 text-sm text-red-500"
+          >
+            {errorState.errors.status.map((error: string) => (
+              <p key={error}>{error}</p>
+            ))}
+          </div>
+        ) : null}
         </div>
       </div>
+      {errorState.message && <div className={styles.error}>
+        <div className={styles.error_icon}>
+          <Image height={32} width={32} src={ErrorIcon} alt='Error icon'/>
+        </div>
+        <div className={styles.error_title}>
+          {errorState.message}
+        </div>
+      </div>}
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/invoices"
