@@ -3,6 +3,7 @@ const {
   invoices,
   customers,
   revenue,
+  cars,
   users,
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
@@ -125,6 +126,49 @@ async function seedCustomers() {
   }
 }
 
+async function seedCars() {
+  try {
+    await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    // Create the "cars" table if it doesn't exist
+    const createTable = await sql`
+      CREATE TABLE IF NOT EXISTS cars (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        make VARCHAR(255) NOT NULL,
+        model VARCHAR(255) NOT NULL,
+        year VARCHAR(255) NOT NULL,
+        mileage VARCHAR(255) NOT NULL,
+        gearbox VARCHAR(255) NOT NULL,
+        fuel_type VARCHAR(255) NOT NULL,
+        main_image VARCHAR(255) NOT NULL
+      );
+    `;
+
+    console.log(`Created "cars" table`);
+
+    // Insert data into the "cars" table
+    const insertedCars = await Promise.all(
+      cars.map(
+        (car) => sql`
+        INSERT INTO cars (id, make, model, year, mileage, gearbox, fuel_type, main_image)
+        VALUES (${car.id}, ${car.make}, ${car.model}, ${car.year}, ${car.mileage}, ${car.gearbox}, ${car.fuel_type}, ${car.main_image})
+        ON CONFLICT (id) DO NOTHING;
+      `,
+      ),
+    );
+
+    console.log(`Seeded ${insertedCars.length} cars`);
+
+    return {
+      createTable,
+      customers: insertedCars,
+    };
+  } catch (error) {
+    console.error('Error seeding customers:', error);
+    throw error;
+  }
+}
+
 async function seedRevenue() {
   try {
     // Create the "revenue" table if it doesn't exist
@@ -163,6 +207,7 @@ async function seedRevenue() {
 (async () => {
   await seedUsers();
   await seedCustomers();
+  await seedCars();
   await seedInvoices();
   await seedRevenue();
 })();

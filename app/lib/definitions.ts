@@ -9,6 +9,23 @@ export type User = {
   password: string;
 };
 
+export type FavoriteCar = {
+  user_id: string;
+  car_id: string;
+  is_favorite: boolean;
+}
+
+export type Car = {
+  id: string;
+  make: string;
+  model: string;
+  year: string;
+  mileage: string;
+  gearbox: string;
+  fuel_type: string;
+  main_image: string;
+};
+
 export type Customer = {
   id: string;
   name: string;

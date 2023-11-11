@@ -16,14 +16,10 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
     params.set('page', pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   };
-  // NOTE: comment in this code when you get to this point in the course
-
   const allPages = generatePagination(currentPage, totalPages);
 
   return (
     <>
-      {/* NOTE: comment in this code when you get to this point in the course */}
-
       <div className="inline-flex">
         <PaginationArrow
           direction="left"

@@ -6,6 +6,8 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   User,
+  FavoriteCar,
+  Car,
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
@@ -16,15 +18,9 @@ export async function fetchRevenue() {
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
   noStore();
   try {
-    // Artificially delay a reponse for demo purposes.
-    // Don't do this in real life :)
-
-    console.log('Fetching revenue data...');
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await sql<Revenue>`SELECT * FROM revenue`;
-
-    // console.log('Data fetch complete after 3 seconds.');
 
     return data.rows;
   } catch (error) {
@@ -36,7 +32,6 @@ export async function fetchRevenue() {
 export async function fetchLatestInvoices() {
   noStore();
 
-  console.log('Fetching revenue data...');
   await new Promise((resolve) => setTimeout(resolve, 2000));
   try {
     const data = await sql<LatestInvoiceRaw>`
@@ -226,5 +221,50 @@ export async function fetchFilteredCustomers(query: string) {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
+  }
+}
+
+export async function fetchCars() {
+  try {
+    const data = await sql<Car>`
+      SELECT
+        id,
+        make,
+        model,
+        year,
+        mileage,
+        gearbox,
+        fuel_type,
+        main_image
+      FROM cars
+    `;
+
+    const cars = data.rows;
+    return cars;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all cars.');
+  }
+}
+
+export async function fetchFavoriteCars(userId: string) {
+  try {
+    const data = await sql<FavoriteCar>`
+      SELECT *
+      FROM favorites
+      WHERE user_id = ${userId}
+    `;
+
+    const favoriteCars: {
+      [key: string]: boolean
+    } = {}
+    
+    data.rows.map((favoriteCar: FavoriteCar) => (
+        favoriteCars[favoriteCar.car_id] = favoriteCar.is_favorite
+    ));
+    return favoriteCars;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all cars.');
   }
 }

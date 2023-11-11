@@ -3,6 +3,7 @@ import { sql } from '@vercel/postgres';
 import CredentialsProvider  from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
+import { cookies } from 'next/headers'
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 
@@ -30,6 +31,7 @@ export const { auth, signIn, signOut } = NextAuth({
               if (!user) return null;
               const passwordsMatch = await bcrypt.compare(password, user.password);
               if (passwordsMatch) {
+                cookies().set('userId', user.id);
                 return user;
               };
           }

@@ -137,11 +137,6 @@ export async function deleteInvoice(formData: FormData) {
   }
 }
 
-const AuthenticateSchema = z.object({ 
-  email: z.string().email(), 
-  password: z.string().min(6) 
-})
-
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,

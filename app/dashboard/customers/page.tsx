@@ -1,13 +1,12 @@
 import React from 'react'
-import { Metadata } from 'next';
- 
-export const metadata: Metadata = {
-  title: 'Customers'
-};
+import Table from '@/app/ui/customers/table'
+import { fetchFilteredCustomers } from '@/app/lib/data';
 
-function Customers() {
+async function Customers() {
+  const totalPages = await fetchFilteredCustomers('');
+
   return (
-    <div>Customers</div>
+    <Table customers={totalPages}/>
   )
 }
 

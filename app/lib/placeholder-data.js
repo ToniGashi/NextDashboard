@@ -72,6 +72,59 @@ const customers = [
   },
 ];
 
+const cars = [
+  {
+    id: 'df215667-b4fd-41b0-a5cd-5bcc76245605',
+    make: 'Ford',
+    model: 'Ford Focus',
+    year: '2007',
+    mileage: '231000 km',
+    gearbox: 'Manual',
+    fuel_type: 'Diesel',
+    main_image: '/cars/ford-focus.png',
+  },
+  {
+    id: '9d2c0694-193b-4a03-b438-2493a4465eb3',
+    make: 'Audi',
+    model: 'Audi A8',
+    year: '2019',
+    mileage: '59801 km',
+    gearbox: 'Automatic',
+    fuel_type: 'Diesel',
+    main_image: '/cars/audi-a8.png',
+  },
+  {
+    id: 'cd83ce32-d8b3-4c26-8a00-10bd3f1f6a8a',
+    make: 'Dodge',
+    model: 'Dodge Ram 1500',
+    year: '2021',
+    mileage: '19000 km',
+    gearbox: 'Automatic',
+    fuel_type: 'Diesel',
+    main_image: '/cars/dodge-ram.png',
+  },
+  {
+    id: '29091faf-2954-469d-a010-48d339558edb',
+    make: 'Peugeot',
+    model: 'Peugeot 308',
+    year: '2018',
+    mileage: '58000 km',
+    gearbox: 'Manual',
+    fuel_type: 'Diesel',
+    main_image: '/cars/peugeot-308.png',
+  },
+  {
+    id: 'e86f2bc1-beb5-4423-a31d-53738e2ce7f9',
+    make: 'Mazda',
+    model: 'Mazda CX-7',
+    year: '2011',
+    mileage: '169000 km',
+    gearbox: 'Manual',
+    fuel_type: 'Diesel',
+    main_image: '/cars/mazda-cx-7.png',
+  }
+]
+
 const invoices = [
   {
     customer_id: customers[0].id,
@@ -184,5 +237,6 @@ module.exports = {
   users,
   customers,
   invoices,
+  cars,
   revenue,
 };
