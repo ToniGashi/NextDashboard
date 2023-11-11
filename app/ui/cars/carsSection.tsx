@@ -6,7 +6,7 @@ import FavoriteSection from './favoriteSection';
 
 async function CarsSection({query}: {query: string}) {
   const cars = await fetchCars();
-  const userId = cookies().get('user')?.value || "";
+  const userId = cookies().get('userId')?.value || "";
   const carFavoriteObject = await fetchFavoriteCars(userId);
 
   return (

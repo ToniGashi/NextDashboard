@@ -12,6 +12,7 @@ function StaticTopSection() {
           height={360}
           className="hidden md:block w-[48%]"
           alt="Ads1"
+          priority
       />
       <Image
           src={Ads2}
@@ -19,6 +20,7 @@ function StaticTopSection() {
           height={360}
           className="hidden md:block w-[48%]"
           alt="Ads2"
+          priority
       />
     </div>
   )

@@ -265,6 +265,6 @@ export async function fetchFavoriteCars(userId: string) {
     return favoriteCars;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch all cars.');
+    throw new Error('Failed to fetch all favorites.');
   }
 }
